@@ -1,9 +1,9 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Hero from './hero'
 
 export default function Home() {
   return (
-    <>
-      <ConnectButton />
-    </>
-  );
+    <main className="relative">
+      <Hero />
+    </main>
+  )
 }
