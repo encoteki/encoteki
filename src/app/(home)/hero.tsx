@@ -62,7 +62,7 @@ export default function Hero() {
   ]
 
   return (
-    <div className="m-auto my-16 w-[calc(100%-32px)] tablet:w-[calc(100%-64px)] desktop:max-w-[1440px]">
+    <div className="m-auto mt-[72px] w-[calc(100%-32px)] tablet:w-[calc(100%-64px)] desktop:max-w-[1440px]">
       <div className="m-auto text-center tablet:w-[786px]">
         <Image
           src={EncotekiLogo}

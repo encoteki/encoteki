@@ -3,7 +3,6 @@ import './globals.css'
 import Provider from './providers'
 import '@rainbow-me/rainbowkit/styles.css'
 import { Outfit } from 'next/font/google'
-import NavBar from '@/components/navbar'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -23,10 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${outfit.className} relative`}>
-        <Provider>
-          <NavBar />
-          {children}
-        </Provider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   )
