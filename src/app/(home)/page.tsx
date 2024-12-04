@@ -3,6 +3,7 @@ import Hero from './hero'
 import NFTCollection from './nftCollection'
 import Benefit from './benefit'
 import About from './about'
+import Roadmap from './roadmap'
 
 export default function Home() {
   return (
@@ -23,6 +24,9 @@ export default function Home() {
           </section>
           <section id="about" className="py-10 tablet:py-[60px]">
             <About />
+          </section>
+          <section id="roadmap" className="py-10 tablet:py-[60px]">
+            <Roadmap />
           </section>
         </div>
       </main>
