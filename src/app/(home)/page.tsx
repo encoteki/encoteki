@@ -2,6 +2,7 @@ import NavBar from '@/components/navbar'
 import Hero from './hero'
 import NFTCollection from './nftCollection'
 import Benefit from './benefit'
+import About from './about'
 
 export default function Home() {
   return (
@@ -19,6 +20,9 @@ export default function Home() {
           </section>
           <section id="benefit" className="py-10 tablet:py-[60px]">
             <Benefit />
+          </section>
+          <section id="about" className="py-10 tablet:py-[60px]">
+            <About />
           </section>
         </div>
       </main>
