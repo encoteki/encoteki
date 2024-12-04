@@ -21,6 +21,7 @@ export default {
         },
         neutral: {
           60: '#CCCECC',
+          40: '#7D817D',
         },
         green: {
           90: '#F0FAF3',
