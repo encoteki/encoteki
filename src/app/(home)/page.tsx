@@ -4,6 +4,7 @@ import NFTCollection from './nftCollection'
 import Benefit from './benefit'
 import About from './about'
 import Roadmap from './roadmap'
+import Faq from './faq'
 
 export default function Home() {
   return (
@@ -27,6 +28,9 @@ export default function Home() {
           </section>
           <section id="roadmap" className="py-10 tablet:py-[60px]">
             <Roadmap />
+          </section>
+          <section id="faq" className="pt-10 tablet:pt-[60px]">
+            <Faq />
           </section>
         </div>
       </main>
