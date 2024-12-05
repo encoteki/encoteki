@@ -62,8 +62,8 @@ export default function Hero() {
   ]
 
   return (
-    <div className="m-auto mt-[72px] w-[calc(100%-32px)] tablet:w-[calc(100%-64px)] desktop:max-w-[1440px]">
-      <div className="m-auto text-center tablet:w-[786px]">
+    <section className="m-auto mt-[72px] w-[calc(100%-32px)] tablet:w-[calc(100%-64px)] desktop:max-w-[1440px]">
+      <div className="m-auto text-center desktop:w-[786px]">
         <Image
           src={EncotekiLogo}
           alt={'Encoteki'}
@@ -71,7 +71,8 @@ export default function Hero() {
           className="block tablet:hidden"
         />
         <TypewriterEffectSmooth words={heading} />
-        <span className="font-inter w-full text-base font-normal tablet:text-lg">
+
+        <span className="font-inter text-base font-normal tablet:text-lg">
           {desc}
         </span>
       </div>
@@ -87,6 +88,6 @@ export default function Hero() {
       <div className="antialiase relative flex flex-col items-center justify-center overflow-hidden rounded-md desktop:pb-6">
         <InfiniteMovingImages items={medias} direction="right" speed="normal" />
       </div>
-    </div>
+    </section>
   )
 }
