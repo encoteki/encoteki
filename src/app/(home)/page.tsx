@@ -5,6 +5,7 @@ import Benefit from './benefit'
 import About from './about'
 import Roadmap from './roadmap'
 import Faq from './faq'
+import Footer from '@/components/footer'
 
 export default function Home() {
   return (
@@ -34,6 +35,8 @@ export default function Home() {
           </section>
         </div>
       </main>
+
+      <Footer />
     </>
   )
 }
