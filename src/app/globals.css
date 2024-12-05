@@ -11,3 +11,6 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
+html {
+  scroll-behavior: smooth;
+}
