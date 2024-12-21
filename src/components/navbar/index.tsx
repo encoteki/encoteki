@@ -62,14 +62,14 @@ export default function NavBar() {
         <></>
       ) : (
         <div className="font-inter flex items-center gap-4 text-base font-medium">
-          <Link href="https://mint.encoteki.com/dao">
+          <Link href="/dao">
             <button className="rounded-[32px] border border-primary-green bg-white px-8 py-2 duration-300 hover:bg-green-90 tablet:px-16 tablet:py-4">
               <span className="font-inter text-base font-medium text-primary-green">
                 DAO
               </span>
             </button>
           </Link>
-          <Link href="https://mint.encoteki.com">
+          <Link href="/mint">
             <button className="rounded-[32px] bg-primary-green px-8 py-2 duration-300 hover:bg-green-10 tablet:px-16 tablet:py-4">
               <span className="font-inter text-base font-medium text-white">
                 Mint
