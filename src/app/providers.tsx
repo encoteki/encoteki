@@ -4,6 +4,7 @@ import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { config } from '../config/rainbowkit-config'
+import { MintProvider } from '@/context/mintContext'
 
 export default function Provider({
   children,
@@ -15,7 +16,9 @@ export default function Provider({
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
+        <RainbowKitProvider>
+          <MintProvider>{children}</MintProvider>
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   )

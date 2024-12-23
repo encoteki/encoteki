@@ -1,4 +1,4 @@
-import iconArrow from '@/assets/icon/icon.arrow.svg'
+import iconArrow from '@/assets/icon/green.arrow.svg'
 import iconLightBulb from '@/assets/icon/icon.lightbulb.svg'
 import iconTarget from '@/assets/icon/icon.target.svg'
 import Image from 'next/image'

@@ -4,13 +4,19 @@
 
 :root {
   --background: #f6f6ec;
-  --foreground: #000000;
+  --foreground: #0d140f;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
 }
+
 html {
   scroll-behavior: smooth;
+}
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
 }
