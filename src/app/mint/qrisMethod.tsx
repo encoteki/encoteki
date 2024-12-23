@@ -29,12 +29,15 @@ export default function QrisMethod() {
         <>
           <MintPageHeading
             wording="Enter your wallet address"
-            action={() => setPaymentMethod('')}
+            action={() => {
+              setPaymentMethod('')
+              setSection(0)
+            }}
           />
           <GrayLine />
           <div className="space-y-8 p-6">
             <section className="space-y-4">
-              <p className="text-neutral-30 text-sm font-normal">
+              <p className="text-sm font-normal text-neutral-30">
                 Your NFT will be sent to the wallet address you provided. Please
                 ensure that it is correct, as we cannot recover NFTs sent to
                 incorrect addresses.
@@ -45,7 +48,7 @@ export default function QrisMethod() {
                 placeholder="Walet address"
               />
               <button onClick={() => {}}>
-                <p className="text-neutral-30 text-sm font-normal hover:text-primary-green">
+                <p className="text-sm font-normal text-neutral-30 hover:text-primary-green">
                   Where to get my wallet address?
                 </p>
               </button>
@@ -70,7 +73,7 @@ export default function QrisMethod() {
               <p className="py-4 text-center">QR not available</p>
               <div className="">
                 <p className="text-base">Payment instructions</p>
-                <ul className="text-neutral-30 text-style ml-4 list-disc text-sm">
+                <ul className="text-style ml-4 list-disc text-sm text-neutral-30">
                   <li>
                     Open app that supports QRIS payment such as GoPay, OVO,
                     DANA, M-Banking
@@ -83,7 +86,7 @@ export default function QrisMethod() {
                   </li>
                 </ul>
               </div>
-              <p className="text-neutral-30 text-sm">
+              <p className="text-sm text-neutral-30">
                 Page not refreshing? Click the button below
               </p>
             </div>

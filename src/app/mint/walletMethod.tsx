@@ -17,12 +17,18 @@ import { useEffect } from 'react'
 
 export default function WalletMethod() {
   const {
+    setSection,
     setPaymentMethod,
     setHash,
     setTxSuccess,
     setIsSufficientFund,
     isSufficientFund,
   } = useMintCtx()
+
+  useEffect(() => {
+    setSection(1)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const { isConnected, address } = useAccount()
   const { data } = useBalance({
@@ -75,7 +81,13 @@ export default function WalletMethod() {
 
   return (
     <>
-      <MintPageHeading wording="Pay" action={() => setPaymentMethod('')} />
+      <MintPageHeading
+        wording="Pay"
+        action={() => {
+          setPaymentMethod('')
+          setSection(0)
+        }}
+      />
       <GrayLine />
 
       <div className="space-y-3 p-6">

@@ -9,11 +9,11 @@ export default function MintPageHeading({
   wording: string
   action: () => void
 }) {
-  const { paymentMethod } = useMintCtx()
+  const { paymentMethod, section } = useMintCtx()
 
   return (
     <div className="flex items-center gap-2 p-6 pl-4">
-      {paymentMethod !== '' && (
+      {paymentMethod !== '' && section > 0 && (
         <button onClick={action}>
           <Image
             className="rotate-180"
