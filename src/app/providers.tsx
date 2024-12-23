@@ -5,6 +5,7 @@ import { WagmiProvider } from 'wagmi'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { config } from '../config/rainbowkit-config'
 import { MintProvider } from '@/context/mintContext'
+import { DaoProvider } from '@/context/daoContext'
 
 export default function Provider({
   children,
@@ -17,7 +18,9 @@ export default function Provider({
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
-          <MintProvider>{children}</MintProvider>
+          <MintProvider>
+            <DaoProvider>{children}</DaoProvider>
+          </MintProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
