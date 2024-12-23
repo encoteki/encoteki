@@ -41,6 +41,14 @@ export default {
         red: {
           '90': '#FBE8E2',
         },
+        brown: {
+          '10': '#FEF3CD',
+          '90': '#644E02',
+        },
+        blue: {
+          '10': '#CEEEFD',
+          '90': '#044462',
+        },
       },
       animation: {
         scroll:
