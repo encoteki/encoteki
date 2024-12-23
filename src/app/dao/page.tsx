@@ -8,6 +8,8 @@ import { getDAOs } from '@/utils/supabase/getDaos'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Encoteki DAO',
   description: 'Encoteki DAO',

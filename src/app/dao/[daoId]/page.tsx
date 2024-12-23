@@ -10,14 +10,16 @@ import calculateDayDifference from '@/utils/calculateDayDifference'
 import { getDaoOptions } from '@/utils/supabase/getDaoOptions'
 import Footer from '@/components/footer'
 
+type Params = Promise<{ daoId: string }>
+
 export async function generateMetadata({
   params,
 }: {
-  params: { daoId: number }
+  params: Params
 }): Promise<Metadata> {
   const { daoId } = await params
 
-  const dao: DAOResponse = await getDaoById(daoId)
+  const dao: DAOResponse = await getDaoById(Number(daoId))
 
   return {
     title: dao.dao_name || 'DAO',
@@ -25,15 +27,13 @@ export async function generateMetadata({
   }
 }
 
-export default async function DAODetailPage({
-  params,
-}: {
-  params: { daoId: number }
-}) {
+export const dynamic = 'force-dynamic'
+
+export default async function DAODetailPage({ params }: { params: Params }) {
   const { daoId } = await params
 
-  const dao: DAOResponse = await getDaoById(daoId)
-  const options: OptionsResponse[] = await getDaoOptions(daoId)
+  const dao: DAOResponse = await getDaoById(Number(daoId))
+  const options: OptionsResponse[] = await getDaoOptions(Number(daoId))
 
   const breadcrumbs = [
     {
@@ -83,7 +83,7 @@ export default async function DAODetailPage({
         </header>
 
         <section>
-          <DAODetail daoId={daoId} daoDetail={dao} options={options} />
+          <DAODetail daoId={Number(daoId)} daoDetail={dao} options={options} />
         </section>
       </main>
       <Footer />
