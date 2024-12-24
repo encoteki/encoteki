@@ -22,6 +22,7 @@ export default async function PartnerDetailsModal({
 
         {/* Desktop View */}
         <div className="hidden w-full gap-8 p-6 desktop:flex">
+          {/* Deals Detail */}
           <article className="h-[100px] w-3/5 space-y-4">
             <h3 className="text-2xl font-medium">{partner.deals}</h3>
             <ul className="ml-4 list-disc">
@@ -42,10 +43,13 @@ export default async function PartnerDetailsModal({
 
             {/* About Partner */}
             <div className="flex flex-col gap-4">
+              {/* Partner Info */}
               <div className="space-y-2">
                 <p className="text-lg">{partner.name}</p>
                 <p className="text-sm text-neutral-40">{partner.subtopic}</p>
               </div>
+
+              {/* Partner Store */}
               <ExternalRedirectionBtn
                 wording={'See store'}
                 url={partner.partner_url}
@@ -76,7 +80,7 @@ export default async function PartnerDetailsModal({
         </div>
 
         {/* Mobile/Tablet View */}
-        <div className="flex h-full w-full flex-col gap-8 p-6 desktop:hidden">
+        <div className="flex flex-grow flex-col justify-between gap-8 p-6 desktop:hidden">
           <section className="h-auto w-full space-y-6">
             {/* About Partner */}
             <div className="flex gap-4">
@@ -109,9 +113,9 @@ export default async function PartnerDetailsModal({
                   return (
                     <div key={index}>
                       <SDGBadge
-                        wording={sdg.name}
-                        bgColor={'#FAD1D6'}
-                        textColor={'#5C0A14'}
+                        wording={`#${sdg.sdg_number} ${sdg.name}`}
+                        bgColor={sdg.bg_color}
+                        textColor={sdg.text_color}
                       />
                     </div>
                   )
@@ -119,6 +123,7 @@ export default async function PartnerDetailsModal({
               </div>
             </div>
 
+            {/* Deals Detail */}
             <article className="h-auto space-y-4">
               <ul className="ml-4 list-disc">
                 <li className="text-sm text-neutral-30">Details coming soon</li>
@@ -129,7 +134,6 @@ export default async function PartnerDetailsModal({
           <ExternalRedirectionBtn
             wording={'See store'}
             url={partner.partner_url}
-            classname="w-full absolute bottom-6"
           />
         </div>
       </ModalBody>

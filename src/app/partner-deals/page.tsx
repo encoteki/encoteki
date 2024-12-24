@@ -6,8 +6,6 @@ import Footer from '@/components/footer'
 import { getPartners } from '@/utils/supabase/getPartners'
 import { PartnerResponse } from '@/types/supabase'
 import PartnerDetailsModal from './partnerDetailsModal'
-// import ExternalRedirectionBtn from '@/components/button/defaultButton'
-// import SDGBadge from '@/components/badge/sdgBadge'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,8 +22,9 @@ export default async function Partners() {
       <NavBar />
 
       {/* Mobile & Tablet View */}
-      <div className="mx-auto w-[calc(100%-32px)] max-w-[450px] py-[72px] desktop:hidden">
+      <div className="mx-auto w-[calc(100%-32px)] max-w-[450px] py-[72px] tablet:w-[calc(100%-64px)] tablet:max-w-[800px] desktop:hidden">
         <main className="flex flex-col gap-8 desktop:hidden">
+          {/* Heading */}
           <header className="desktop:space-y-4">
             <h2 className="text-[32px] font-medium">Partner Deals</h2>
             <h5 className="text-base font-normal">
@@ -33,7 +32,8 @@ export default async function Partners() {
             </h5>
           </header>
 
-          <section className="flex flex-col gap-4">
+          {/* Content */}
+          <section className="flex flex-col gap-4 tablet:grid tablet:grid-cols-2 tablet:gap-4">
             {partners.map((partner, index) => (
               <Modal key={index}>
                 <ModalTrigger className="flex items-center gap-4 rounded-2xl bg-white p-4">
@@ -66,6 +66,7 @@ export default async function Partners() {
       {/* Desktop View */}
       <div className="mx-auto hidden desktop:block desktop:w-[913px] desktop:py-24">
         <main className="flex flex-col gap-12">
+          {/* Heading */}
           <header className="desktop:space-y-4">
             <h2 className="text-[48px] font-medium">Partner Deals</h2>
             <h5 className="text-lg font-normal">
@@ -73,6 +74,7 @@ export default async function Partners() {
             </h5>
           </header>
 
+          {/* Content */}
           <div className="grid grid-cols-2 gap-4">
             {partners.map((partner, index) => (
               <Modal key={index}>
