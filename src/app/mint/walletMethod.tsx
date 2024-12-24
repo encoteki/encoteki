@@ -12,7 +12,7 @@ import {
 } from 'wagmi'
 import { parseEther, parseGwei } from 'viem'
 import { costValue } from '@/constant/encoteki'
-import contractConfig from '@/config/contract'
+import contractConfig from '@/config/contract-config'
 import { useEffect } from 'react'
 
 export default function WalletMethod() {
