@@ -1,62 +1,17 @@
-// 'use client'
-
 import Image from 'next/image'
-// import SDGBadge from '@/components/badge/sdgBadge'
+import SDGBadge from '@/components/badge/sdgBadge'
 import ExternalRedirectionBtn from '@/components/button/defaultButton'
 import GrayLine from '@/components/lines/grayLine'
 import { ModalBody } from '@/components/ui/animated-modal'
-import { PartnerResponse } from '@/types/supabase'
-// import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-// import { useEffect, useState } from 'react'
+import { PartnerResponse, SDGResponse } from '@/types/supabase'
+import { getSDGsByIds } from '@/utils/supabase/getSDGsByIds'
 
-// interface SDGType {
-//   name: string
-//   number: number
-// }
-
-export default function PartnerDetailsModal({
+export default async function PartnerDetailsModal({
   partner,
 }: {
   partner: PartnerResponse
 }) {
-  // const supabase = createClientComponentClient()
-  // const [sdgs, setSdgs] = useState<[]>([])
-
-  // useEffect(() => {
-  //   const getSDGs = async () => {
-  //     const { data, error } = await supabase
-  //       .from('mapping_partner_sdg')
-  //       .select('sdg_id')
-  //       .eq('partner_id', partner.id)
-
-  //     if (error) {
-  //       console.error('Error Get mapping SDGs:', error.message)
-  //       return
-  //     }
-  //     if (data) {
-  //       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //       const tempSdg: any[] = []
-  //       for (const item of data) {
-  //         const { data: sdgtemp, error } = await supabase
-  //           .from('sdg')
-  //           .select('*')
-  //           .eq('id', item.sdg_id)
-
-  //         if (error) {
-  //           console.error('Error Get SDG:', error.message)
-  //           return
-  //         }
-
-  //         tempSdg.push(sdgtemp)
-  //       }
-  //       setSdgs(tempSdg)
-  //     }
-  //   }
-
-  //   getSDGs()
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+  const sdgs: SDGResponse[] = await getSDGsByIds(partner.id)
 
   return (
     <>
@@ -101,20 +56,20 @@ export default function PartnerDetailsModal({
             {/* SDG */}
             <div className="space-y-3">
               <p className="text-sm text-neutral-30">
-                This brand supports these SGDs
+                This brand supports these SDGs
               </p>
               <div className="flex w-full flex-wrap gap-2">
-                {/* {sdgs.map((sdg, index) => {
+                {sdgs.map((sdg, index) => {
                   return (
                     <div key={index}>
                       <SDGBadge
-                        wording={sdg.name}
-                        bgColor={'#FAD1D6'}
-                        textColor={'#5C0A14'}
+                        wording={`#${sdg.sdg_number} ${sdg.name}`}
+                        bgColor={sdg.bg_color}
+                        textColor={sdg.text_color}
                       />
                     </div>
                   )
-                })} */}
+                })}
               </div>
             </div>
           </section>
@@ -126,7 +81,7 @@ export default function PartnerDetailsModal({
             {/* About Partner */}
             <div className="flex gap-4">
               {/* Partner Logo */}
-              <div className="size-20 w-1/4 rounded-2xl bg-white drop-shadow-lg">
+              <div className="flex size-20 items-center rounded-2xl bg-white drop-shadow-lg">
                 <Image
                   src={partner.image_url}
                   alt="alt"
@@ -147,10 +102,10 @@ export default function PartnerDetailsModal({
             {/* SDG */}
             <div className="space-y-3">
               <p className="text-sm text-neutral-30">
-                This brand supports these SGDs
+                This brand supports these SDGs
               </p>
               <div className="flex w-full flex-wrap gap-2">
-                {/* {sdgs.map((sdg, index) => {
+                {sdgs.map((sdg, index) => {
                   return (
                     <div key={index}>
                       <SDGBadge
@@ -160,7 +115,7 @@ export default function PartnerDetailsModal({
                       />
                     </div>
                   )
-                })} */}
+                })}
               </div>
             </div>
 
