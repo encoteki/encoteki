@@ -7,8 +7,8 @@ import React, {
 } from 'react'
 
 type DaoContextType = {
-  nftCollection: Set<number>
-  setNftCollection: Dispatch<SetStateAction<Set<number>>>
+  nftIdsForWallet: Array<number>
+  setnftIdsForWallet: Dispatch<SetStateAction<Array<number>>>
   voteSuccess: boolean
   setVoteSuccess: Dispatch<SetStateAction<boolean>>
 }
@@ -18,12 +18,17 @@ const DaoContext = createContext<DaoContextType | undefined>(undefined)
 export const DaoProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [nftCollection, setNftCollection] = useState<Set<number>>(new Set())
+  const [nftIdsForWallet, setnftIdsForWallet] = useState<Array<number>>([])
   const [voteSuccess, setVoteSuccess] = useState(false)
 
   return (
     <DaoContext.Provider
-      value={{ nftCollection, setNftCollection, voteSuccess, setVoteSuccess }}
+      value={{
+        nftIdsForWallet,
+        setnftIdsForWallet,
+        voteSuccess,
+        setVoteSuccess,
+      }}
     >
       {children}
     </DaoContext.Provider>

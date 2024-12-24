@@ -8,6 +8,9 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useAccount } from 'wagmi'
 import { DAOResponse, OptionsResponse, SubmitVoteDto } from '@/types/dao'
 import { DaoType } from '@/enums/daoType'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { useReadContract } from 'wagmi'
+import contractConfig from '@/config/contract-config'
 
 export default function DAODetail({
   daoId,
@@ -19,62 +22,40 @@ export default function DAODetail({
   options: OptionsResponse[]
 }) {
   const supabase = createClientComponentClient()
-  const { nftCollection } = useDaoCtx()
+  const { setnftIdsForWallet, nftIdsForWallet } = useDaoCtx()
 
-  // Wallet
+  // Connect Wallet Modal
+  const { openConnectModal } = useConnectModal()
   const { isConnected, address } = useAccount()
-  const contractAddress = process.env.NEXT_PUBLIC_SMART_CONTRACT_ADDRESS
 
+  // Count of vote
   const [voteCount, setVoteCount] = useState<number>(0)
+  // Available NFT Ids to vote
   const [availableNFTIds, setAvailableNFTIds] = useState<Array<any>>([])
-  const [isSubmitVote, setIsSubmitVote] = useState<boolean>(false)
-  const [isNoVote, setIsNoVote] = useState<boolean>(false)
+  // Eligible of vote
+  const [eligibleVote, setEligibleVote] = useState<boolean>(true)
+  // Status of vote
+  const [hasVote, setHasVote] = useState<boolean>(false)
+
+  const { data: userNFTIds, error } = useReadContract({
+    ...contractConfig,
+    functionName: 'walletOfOwner',
+    args: [address ?? '0x0000'],
+  })
 
   useEffect(() => {
-    const getHolderCount = async () => {
-      if (address) {
-        const holderCount: Set<number> = new Set()
+    if (userNFTIds) {
+      // Convert BigInt array to number array
+      const userNFTIdsAsNumber = userNFTIds.map((id) => Number(id))
 
-        const response = await fetch(
-          `https://manta-sepolia.explorer.caldera.xyz/api/v2/addresses/${address}/nft/collections?type=ERC-721%2CERC-404%2CERC-1155`,
-        )
-
-        if (response.ok) {
-          const data = await response.json()
-          if (data && Array.isArray(data.items)) {
-            // If NFT on Encoteki > 0
-            if (data.items.length > 0) {
-              // Filter Encoteki Contract Address
-              const filteredItems = data.items.filter(
-                (item: any) => item.token.address === contractAddress,
-              )
-
-              if (Array.isArray(filteredItems[0].token_instances)) {
-                for (const item of [
-                  ...filteredItems[0].token_instances,
-                ].reverse()) {
-                  holderCount.add(item.id)
-                  nftCollection.add(item.id)
-                }
-              }
-            }
-          } else {
-            console.error('Items is not an array or is undefined.')
-          }
-        }
-
-        return holderCount
-      } else {
-        console.error('Address is undefined')
-      }
+      setnftIdsForWallet(userNFTIdsAsNumber)
+    } else if (error) {
+      console.error('Error reading contract:', error)
     }
+  }, [userNFTIds, error, setnftIdsForWallet])
 
-    const getAvailableVotes = async (nfts: Set<number>) => {
-      const arrayNfts: Array<number> = []
-      for (const nft of nfts) {
-        arrayNfts.push(nft)
-      }
-
+  useEffect(() => {
+    const getAvailableVotes = async () => {
       const usedNfts: Array<any> = []
       let remainVote: number = 0
 
@@ -82,10 +63,10 @@ export default function DAODetail({
         .from('vote_mapping')
         .select('nft_id')
         .eq('dao_id', daoId)
-        .in('nft_id', arrayNfts.length > 0 ? arrayNfts : [])
+        .in('nft_id', nftIdsForWallet.length > 0 ? nftIdsForWallet : [])
 
       if (data) {
-        remainVote = arrayNfts.length - data.length
+        remainVote = nftIdsForWallet.length - data.length
       }
 
       if (error) {
@@ -98,41 +79,33 @@ export default function DAODetail({
           usedNfts.push(String(nft.nft_id))
         }
 
-        const filteredArray = arrayNfts.filter(
+        const unusedNfts = nftIdsForWallet.filter(
           (item) => !usedNfts.includes(item),
         )
 
-        if (filteredArray.length == 0) {
-          setIsNoVote(true)
-        }
+        setAvailableNFTIds(unusedNfts)
 
-        setAvailableNFTIds(filteredArray)
+        if (unusedNfts.length === 0) {
+          setEligibleVote(false)
+        }
       } else {
-        console.error('data is not an array or is undefined.')
+        console.error('Data is not an array or is undefined.')
       }
 
       setVoteCount(remainVote)
     }
 
-    const loadData = async () => {
-      if (isConnected) {
-        const nfts = await getHolderCount()
-        if (nfts) {
-          getAvailableVotes(nfts)
-        }
-      }
-    }
-
-    loadData()
-  }, [address, isConnected, daoId, contractAddress, nftCollection, supabase])
+    getAvailableVotes()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nftIdsForWallet])
 
   // Handle Click Options
   const [isClickedOption, setIsClickedOption] = useState<number>(0)
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+  const [isSubmitDisabled, setSubmitDisabled] = useState(true)
 
   const onClickOption = (index: number) => {
     setIsClickedOption(index)
-    setIsButtonDisabled(false)
+    setSubmitDisabled(false)
   }
 
   // Submit Vote
@@ -166,96 +139,95 @@ export default function DAODetail({
       return
     }
 
-    setIsSubmitVote(true)
+    setHasVote(true)
   }
 
   return (
-    <div className="flex h-full gap-12">
-      {/* DAO Left Content */}
+    <div className="flex h-full flex-col gap-6 tablet:flex-row tablet:gap-12">
+      {/* DAO Vote */}
       <section className="flex h-full w-[416px] flex-col justify-between gap-10 rounded-[32px] bg-white p-8">
         <div className="space-y-6">
-          {isSubmitVote ? (
-            <div className="space-y-1">
-              <h1 className="text-2xl font-medium">Thanks for voting!</h1>
-              <p className="text-neutral-30">You have casted all your votes</p>
-            </div>
+          {/* Options Section */}
+          {!hasVote ? (
+            <>
+              <h1 className="text-2xl font-medium">Options:</h1>
+              <div className="flex flex-col gap-3">
+                {options.map((option) => {
+                  return (
+                    <div
+                      key={option.option_id}
+                      onClick={() => onClickOption(option.option_id)}
+                      className={`${isClickedOption === option.option_id ? 'border-primary-green' : 'border-gray-300'} cursor-pointer rounded-[100px] border bg-white py-3 text-center transition duration-300`}
+                    >
+                      <p className="w-full">{option.option_name}</p>
+                    </div>
+                  )
+                })}
+              </div>
+            </>
           ) : (
-            <h1 className="text-2xl font-medium">Options:</h1>
-          )}
-
-          {!isSubmitVote ? (
-            <div className="flex flex-col gap-3">
-              {options.map((option) => {
-                return (
-                  <div
-                    key={option.option_id}
-                    onClick={() => onClickOption(option.option_id)}
-                    className={`${isClickedOption === option.option_id ? 'border-primary-green' : 'border-gray-300'} cursor-pointer rounded-[100px] border bg-white py-3 text-center transition duration-300`}
-                  >
-                    <p className="w-full">{option.option_name}</p>
-                  </div>
-                )
-              })}
-            </div>
-          ) : (
-            <div className="">
-              Thank you for your vote! Your contribution is helping us make a
-              real difference, no matter the cause. We’ll keep you updated on
-              the results and how your choice will impact our mission. Together,
-              we can drive meaningful change for the environment and our
-              communities. Stay tuned for more updates and ways to stay
-              involved!
-            </div>
+            <>
+              <div className="space-y-1">
+                <h1 className="text-2xl font-medium">Thanks for voting!</h1>
+                <p className="text-neutral-30">
+                  You have casted all your votes
+                </p>
+              </div>
+              <p>
+                Thank you for your vote! Your contribution is helping us make a
+                real difference, no matter the cause. We’ll keep you updated on
+                the results and how your choice will impact our mission.
+                Together, we can drive meaningful change for the environment and
+                our communities. Stay tuned for more updates and ways to stay
+                involved!
+              </p>
+            </>
           )}
         </div>
 
-        {/* Bottom Section */}
-        <footer className="">
-          {isConnected ? (
-            <div>
-              {nftCollection.size > 0 ? (
-                <div>
-                  {!isNoVote ? (
-                    <div className={`${isSubmitVote ? 'hidden' : 'block'}`}>
-                      <p className="p-4">You have {voteCount} vote left</p>
-                      <button
-                        onClick={() => submitVote(false)}
-                        disabled={Boolean(isButtonDisabled)}
-                        className={`w-full rounded-[32px] ${isButtonDisabled ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-primary-green'} hover:${isButtonDisabled ? '' : 'bg-green-900'} py-4`}
-                      >
-                        <span className="text-white">Vote</span>
-                      </button>
-                      <button
-                        onClick={() => submitVote(true)}
-                        className="w-full rounded-[32px] bg-white py-4"
-                      >
-                        <span className="text-primary-green">
-                          Remain Neutral
-                        </span>
-                      </button>
-                    </div>
-                  ) : (
-                    <div></div>
-                  )}
-                </div>
-              ) : (
-                <div className="">
-                  <p>You must own an Encoteki NFT to vote. </p>
-                  <Link href="/mint">
-                    <span className="text-primary-green">Mint now</span>
-                  </Link>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div>
-              <p>Connect wallet to vote.</p>
-            </div>
-          )}
-        </footer>
+        {/* Vote Section */}
+        {isConnected ? (
+          <>
+            {eligibleVote ? (
+              <div className={`${hasVote ? 'hidden' : 'block'}`}>
+                <p className="p-4">You have {voteCount} vote left</p>
+                <button
+                  onClick={() => submitVote(false)}
+                  disabled={isSubmitDisabled}
+                  className={`w-full rounded-[32px] ${isSubmitDisabled ? 'cursor-not-allowed bg-gray-500' : 'cursor-pointer bg-primary-green'} hover:${isSubmitDisabled ? '' : 'bg-green-900'} py-4`}
+                >
+                  <span className="text-white">Vote</span>
+                </button>
+                <button
+                  onClick={() => submitVote(true)}
+                  className="w-full rounded-[32px] bg-white py-4"
+                >
+                  <span className="text-primary-green">Remain Neutral</span>
+                </button>
+              </div>
+            ) : (
+              <div>
+                <p>You must own an Encoteki NFT to vote.</p>
+                <Link href="/mint">
+                  <span className="text-primary-green">Mint now</span>
+                </Link>
+              </div>
+            )}
+          </>
+        ) : (
+          <p>
+            Connect wallet to vote.{' '}
+            <span
+              onClick={openConnectModal}
+              className="cursor-pointer text-primary-green"
+            >
+              Connect wallet
+            </span>
+          </p>
+        )}
       </section>
 
-      {/* // DAO Right Section */}
+      {/* // DAO Article */}
       <article className="w-[calc(912px-426px)]">
         {daoDetail.dao_type === DaoType.proposal ? (
           <p className="text-justify">{daoDetail.dao_content}</p>

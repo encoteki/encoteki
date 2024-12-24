@@ -74,7 +74,7 @@ export default async function DAODetailPage({ params }: { params: Params }) {
                 {calculateDayDifference(dao.start_date) > 0
                   ? calculateDayDifference(dao.start_date)
                   : ''}
-                {calculateDayDifference(dao.start_date) > 1
+                {calculateDayDifference(dao.start_date) > 0
                   ? ' days ago'
                   : ' today'}
               </p>
@@ -82,9 +82,9 @@ export default async function DAODetailPage({ params }: { params: Params }) {
           </div>
         </header>
 
-        <section>
+        <>
           <DAODetail daoId={Number(daoId)} daoDetail={dao} options={options} />
-        </section>
+        </>
       </main>
       <Footer />
     </>

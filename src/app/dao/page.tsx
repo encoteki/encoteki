@@ -74,7 +74,7 @@ export default async function DAO() {
                           {calculateDayDifference(dao.start_date) > 0
                             ? calculateDayDifference(dao.start_date)
                             : ''}
-                          {calculateDayDifference(dao.start_date) > 1
+                          {calculateDayDifference(dao.start_date) > 0
                             ? ' days ago'
                             : ' today'}
                         </p>
