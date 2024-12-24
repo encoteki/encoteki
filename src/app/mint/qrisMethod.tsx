@@ -4,10 +4,12 @@ import GrayLine from '@/components/lines/grayLine'
 import { Input } from '@/components/ui/input'
 import { useMintCtx } from '@/context/mintContext'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import QRISDemo from '@/assets/Demo_QRIS.png'
 
 export default function QrisMethod() {
   const { setPaymentMethod, setSection, section } = useMintCtx()
-  const [buttonDisabled, setButtonDisabled] = useState(true)
+  const [submitAddressBtn, setSubmitAddressBtn] = useState(true)
   const [address, setAddress] = useState('')
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,9 +19,9 @@ export default function QrisMethod() {
 
   useEffect(() => {
     if (address) {
-      setButtonDisabled(false)
+      setSubmitAddressBtn(false)
     } else {
-      setButtonDisabled(true)
+      setSubmitAddressBtn(true)
     }
   }, [address])
 
@@ -44,6 +46,7 @@ export default function QrisMethod() {
               </p>
               <Input
                 type="text"
+                defaultValue={address}
                 onChangeCapture={handleInputChange}
                 placeholder="Walet address"
               />
@@ -57,7 +60,7 @@ export default function QrisMethod() {
             <MintPageButton
               wording={'Continue to payment'}
               action={() => setSection(2)}
-              disabled={buttonDisabled}
+              disabled={submitAddressBtn}
             />
           </div>
         </>
@@ -69,8 +72,10 @@ export default function QrisMethod() {
           <GrayLine />
           <div className="space-y-3 p-6">
             <div className="space-y-8">
-              {' '}
-              <p className="py-4 text-center">QR not available</p>
+              <div className="mx-auto size-[240px]">
+                <Image src={QRISDemo} alt={'QRIS Demo'} className="size-full" />
+              </div>
+
               <div className="">
                 <p className="text-base">Payment instructions</p>
                 <ul className="text-style ml-4 list-disc text-sm text-neutral-30">
@@ -94,7 +99,7 @@ export default function QrisMethod() {
             <MintPageButton
               wording={'I have paid'}
               action={() => {}}
-              disabled={buttonDisabled}
+              disabled={true}
             />
           </div>
         </>
