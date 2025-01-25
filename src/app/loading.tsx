@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import TIGGY from '@/assets/tsb/TIGGY.png'
+import TIGGY from '@/assets/tsb/Tiggy_tp.png'
 
 export default function Loading() {
   return (
@@ -12,9 +12,6 @@ export default function Loading() {
           width={100}
           height={100}
         />
-        <p className="text-center text-base font-medium tablet:text-xl">
-          Please wait...
-        </p>
       </div>
     </div>
   )
