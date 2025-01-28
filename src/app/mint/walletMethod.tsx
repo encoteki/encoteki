@@ -55,7 +55,7 @@ export default function WalletMethod() {
           ...contractConfig,
           functionName: 'mint',
           args: [],
-          value: parseEther(costValue.ether),
+          value: parseEther(costValue.native),
         })
       }
     } catch (error) {
@@ -106,7 +106,7 @@ export default function WalletMethod() {
 
           <div className="flex w-full justify-between text-base font-medium">
             <p>Amount</p>
-            <p>{costValue.ether} ETH</p>
+            <p>{costValue.native} AVAX</p>
           </div>
         </section>
 

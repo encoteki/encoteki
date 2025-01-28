@@ -1,14 +1,13 @@
+import { HexString } from '@/types/hexString'
 import { abi } from './contract-abi'
 
-type HexString = `0x${string}`
-
-const mantaCA: HexString =
-  (process.env.NEXT_PUBLIC_MANTA_TESTNET_CA as HexString) ??
-  '0xD2b0395b86EbCD52f21333526327771364c05f0E'
+const ca: HexString =
+  (process.env.NEXT_PUBLIC_AVAX_TESTNET_CA as HexString) ??
+  '0xFB36048157EC2634D7eBf0FD5901aD474b4c1Af1'
 
 const contractConfig = {
   abi,
-  address: mantaCA,
+  address: ca,
 } as const
 
 export default contractConfig

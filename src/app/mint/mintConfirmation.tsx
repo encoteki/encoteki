@@ -5,7 +5,7 @@ import { useMintCtx } from '@/context/mintContext'
 export default function MintConfirmation() {
   const { setTxSuccess, hash } = useMintCtx()
 
-  const testnetURL = process.env.NEXT_PUBLIC_MANTA_TESTNET_URL
+  const testnetURL = process.env.NEXT_PUBLIC_AVAX_TESTNET_URL
 
   return (
     <div className="relative h-auto w-[400px] rounded-3xl bg-white drop-shadow-xl">
@@ -18,7 +18,7 @@ export default function MintConfirmation() {
         </div>
         <section className="space-y-2 px-8 text-center">
           <p className="text-lg">Payment Successful!</p>
-          <p className="text-neutral-30 text-sm">
+          <p className="text-sm text-neutral-30">
             Thank you for your payment, Encoteki is now yours!
           </p>
         </section>

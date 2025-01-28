@@ -4,7 +4,7 @@ import MintPageHeading from '@/components/heading/mintPageHeading'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import Image from 'next/image'
-import RainbowKit from '@/assets/mint/rainbow_kit.png'
+import Avax from '@/assets/mint/avax.svg'
 import QRIS from '@/assets/mint/qris.svg'
 import { useMintCtx } from '@/context/mintContext'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
@@ -22,9 +22,9 @@ export default function SelectPaymentMethod() {
   const payments = [
     {
       index: 0,
-      name: 'Rainbow Kit',
+      name: 'Avalanche',
       method: PaymentMethod.wallet,
-      icon: RainbowKit,
+      icon: Avax,
     },
     {
       index: 1,
@@ -96,7 +96,7 @@ export default function SelectPaymentMethod() {
             <p>Amount</p>
             <p>
               {isWalletPayment
-                ? `${costValue.ether} ETH`
+                ? `${costValue.native} AVAX`
                 : `Rp. ${(300000).toLocaleString('id-ID')}`}
             </p>
           </div>
