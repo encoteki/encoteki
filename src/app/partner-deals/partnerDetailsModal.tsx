@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import SDGBadge from '@/components/badge/sdgBadge'
-import ExternalRedirectionBtn from '@/components/button/defaultButton'
+import ExternalRedirectionBtn from '@/components/button/redirectionButton'
 import GrayLine from '@/components/lines/grayLine'
 import { ModalBody } from '@/components/ui/animated-modal'
 import { PartnerResponse, SDGResponse } from '@/types/supabase'
@@ -25,14 +25,14 @@ export default async function PartnerDetailsModal({
           {/* Deals Detail */}
           <article className="h-[100px] w-3/5 space-y-4">
             <h3 className="text-2xl font-medium">{partner.deals}</h3>
-            <ul className="ml-4 list-disc">
-              <li>Details coming soon</li>
+            <ul className="ml-4 list-disc text-base">
+              <div dangerouslySetInnerHTML={{ __html: partner.tnc }} />
             </ul>
           </article>
 
           <section className="h-auto w-2/5 space-y-4">
             {/* Partner Logo */}
-            <div className="size-24 rounded-2xl bg-white drop-shadow-lg">
+            <div className="flex size-24 items-center rounded-2xl bg-white drop-shadow-lg">
               <Image
                 src={partner.image_url}
                 alt="alt"
@@ -125,8 +125,8 @@ export default async function PartnerDetailsModal({
 
             {/* Deals Detail */}
             <article className="h-auto space-y-4">
-              <ul className="ml-4 list-disc">
-                <li className="text-sm text-neutral-30">Details coming soon</li>
+              <ul className="ml-4 list-disc text-sm">
+                <div dangerouslySetInnerHTML={{ __html: partner.tnc }} />
               </ul>
             </article>
           </section>

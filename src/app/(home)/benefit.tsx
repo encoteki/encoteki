@@ -9,6 +9,7 @@ import ProfitSharing from '@/assets/benefits/profit-sharing.svg'
 import EventPass from '@/assets/benefits/event-pass.svg'
 import DAO from '@/assets/benefits/dao.svg'
 import Link from 'next/link'
+import DefaultButton from '@/components/button/defaultButton'
 
 export default async function Benefit() {
   const benefits = [
@@ -230,13 +231,18 @@ export default async function Benefit() {
               />
             </div>
 
-            <div className="relative space-y-1 rounded-[32px] bg-khaki-99 p-8">
+            <div className="space-y-1 rounded-[32px] bg-khaki-99 p-8">
               <h1 className="text-[32px] font-medium">{benefits[5].title}</h1>
-              <p className="text-base font-normal">{benefits[5].subtitle}</p>
+              <p className="pb-4 text-base font-normal">
+                {benefits[5].subtitle}
+              </p>
+
               <Link href="/partner-deals">
-                <span className="text-base font-normal text-primary-green">
-                  View Offer
-                </span>
+                <DefaultButton
+                  wording={'View deals'}
+                  isPrimary={false}
+                  className="px-8 py-2"
+                />
               </Link>
             </div>
 

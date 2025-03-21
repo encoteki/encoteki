@@ -6,6 +6,7 @@ export interface PartnerResponse {
   subtopic: string
   image_url: string
   partner_url: string
+  tnc: string
 }
 
 // SDGs
