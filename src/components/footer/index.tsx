@@ -14,9 +14,9 @@ import { Encoteki } from '@/constant/encoteki'
 
 export default function Footer() {
   const pathname = usePathname()
-
+  const currentYear: number = new Date().getFullYear()
   const title = 'Join the community and save the world!'
-  const copyright = 'Encoteki © 2024 All rights reserved'
+  const copyright = `Encoteki © ${currentYear} All rights reserved`
   const socmed = [
     {
       name: 'Instagram',
