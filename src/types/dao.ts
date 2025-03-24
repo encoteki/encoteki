@@ -14,6 +14,7 @@ export interface OptionsResponse {
 }
 
 export interface SubmitVoteDto {
+  chain_id?: number
   nft_id: number
   dao_id: number
   option_id?: number
