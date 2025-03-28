@@ -100,13 +100,16 @@ export const InfiniteMovingImages = ({
               aria-hidden="true"
               className="user-select-none -z-1 pointer-events-none absolute"
             ></div>
-            <Image
-              className="m-auto"
-              src={item.path}
-              width={75}
-              height={50}
-              alt="alt"
-            />
+            <div className="w-[75px]">
+              <Image
+                className="m-auto"
+                src={item.path}
+                width={1000}
+                height={0}
+                alt="media"
+                style={{ width: '100%', height: 'auto' }}
+              />
+            </div>
           </li>
         ))}
       </ul>
