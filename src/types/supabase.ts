@@ -7,6 +7,7 @@ export interface PartnerResponse {
   image_url: string
   partner_url: string
   tnc: string
+  type: string
 }
 
 // SDGs

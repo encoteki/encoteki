@@ -1,11 +1,9 @@
-import { cookies } from 'next/headers'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { getMappingSDGs } from './getMappingSDGs'
 
 export async function getSDGsByIds(partnerid: number) {
-  const supabase = createServerComponentClient({
-    cookies: () => cookies(),
-  })
+  const supabase = createClientComponentClient()
+
   const sdgIds: number[] = []
 
   const mappings = await getMappingSDGs(partnerid)

@@ -1,11 +1,10 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import NavBar from '@/components/navbar'
-import { Modal, ModalTrigger } from '@/components/ui/animated-modal'
 import Footer from '@/components/footer'
 import { getPartners } from '@/utils/supabase/getPartners'
 import { PartnerResponse } from '@/types/supabase'
-import PartnerDetailsModal from './partnerDetailsModal'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,8 +34,8 @@ export default async function Partners() {
           {/* Content */}
           <section className="flex flex-col gap-4 tablet:grid tablet:grid-cols-2 tablet:gap-4">
             {partners.map((partner, index) => (
-              <Modal key={index}>
-                <ModalTrigger className="flex items-center gap-4 rounded-2xl bg-white p-4">
+              <Link key={index} href={`/partner-deals/${partner.id}`}>
+                <div className="flex items-center gap-4 rounded-2xl bg-white p-4">
                   <div className="flex h-[154px] w-full flex-1 items-center justify-center">
                     <Image
                       src={partner.image_url}
@@ -53,11 +52,8 @@ export default async function Partners() {
                       {partner.subtopic}
                     </p>
                   </div>
-                </ModalTrigger>
-
-                {/* Modal */}
-                <PartnerDetailsModal partner={partner} />
-              </Modal>
+                </div>
+              </Link>
             ))}
           </section>
         </main>
@@ -77,9 +73,8 @@ export default async function Partners() {
           {/* Content */}
           <div className="grid grid-cols-2 gap-4">
             {partners.map((partner, index) => (
-              <Modal key={index}>
-                {/* Modal Card */}
-                <ModalTrigger className="flex items-center bg-white desktop:h-[154px] desktop:w-[450px] desktop:gap-4 desktop:rounded-2xl desktop:p-4">
+              <Link key={index} href={`/partner-deals/${partner.id}`}>
+                <div className="flex items-center bg-white desktop:h-[154px] desktop:w-[450px] desktop:gap-4 desktop:rounded-2xl desktop:p-4">
                   <div className="flex h-fit flex-1 items-center justify-center">
                     <Image
                       src={partner.image_url}
@@ -98,11 +93,8 @@ export default async function Partners() {
                       {partner.subtopic}
                     </p>
                   </div>
-                </ModalTrigger>
-
-                {/* Modal */}
-                <PartnerDetailsModal partner={partner} />
-              </Modal>
+                </div>
+              </Link>
             ))}
           </div>
         </main>

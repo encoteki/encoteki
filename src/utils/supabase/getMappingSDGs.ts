@@ -1,10 +1,7 @@
-import { cookies } from 'next/headers'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export async function getMappingSDGs(partnerId: number) {
-  const supabase = createServerComponentClient({
-    cookies: () => cookies(),
-  })
+  const supabase = createClientComponentClient()
 
   const { data, error } = await supabase
     .from('mapping_partner_sdg')

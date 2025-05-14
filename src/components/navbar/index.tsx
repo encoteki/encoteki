@@ -82,6 +82,12 @@ export default function NavBar() {
           {isConnected ? <ConnectButton /> : <ConnectWalletButton />}
         </div>
       )}
+
+      {pathname.startsWith('/partner-deals') && (
+        <div className="flex flex-col-reverse gap-2 tablet:flex-row tablet:gap-4">
+          {isConnected ? <ConnectButton /> : <ConnectWalletButton />}
+        </div>
+      )}
     </nav>
   )
 }
