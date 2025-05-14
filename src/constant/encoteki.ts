@@ -7,8 +7,11 @@ export const Encoteki = {
 }
 
 export const costValue = {
-  native: '0.01', // can be ETH, AVAX and others
+  native: '0.0001', // can be ETH, AVAX and others
   gwei: '100000',
   wei: '100000000000000',
   rupiah: '320000',
+
+  eth: 'ETH',
+  idrx: 'IDRX',
 }

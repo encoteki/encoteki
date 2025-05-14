@@ -5,7 +5,7 @@ import { useMintCtx } from '@/context/mintContext'
 export default function MintConfirmation() {
   const { setTxSuccess, hash } = useMintCtx()
 
-  const testnetURL = process.env.NEXT_PUBLIC_AVAX_TESTNET_URL
+  const testnetURL = process.env.NEXT_PUBLIC_TESTNET_URL
 
   return (
     <div className="relative h-auto w-[400px] rounded-3xl bg-white drop-shadow-xl">

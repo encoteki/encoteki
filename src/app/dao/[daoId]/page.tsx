@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '@/components/navbar'
 import { DAOResponse, OptionsResponse, SubmitVoteDto } from '@/types/dao'
-import DAOBreadcrumb from '@/components/breadcrumbs/daoBreadrumbs'
+import Breadcrumb from '@/components/breadcrumbs/breadcrumbs'
 import DaoBadge from '@/components/badge/daoBadge'
 import calculateDayDifference from '@/utils/calculateDayDifference'
 import Footer from '@/components/footer'
@@ -91,8 +91,6 @@ export default function DAODetailPage({ params }: { params: Params }) {
       // Convert BigInt array to number array
       const walletOfOwner = data.map((id) => Number(id))
 
-      console.log(chainId + ' pcs of nft')
-
       // Get data of NFT Id that has vote
       const usedNFTId = await getUsedNFTId(
         Number(daoId),
@@ -175,7 +173,7 @@ export default function DAODetailPage({ params }: { params: Params }) {
       ) : (
         <main className="mx-auto my-16 w-[calc(100%-32px)] max-w-[912px] space-y-12 tablet:my-32">
           <header className="space-y-8">
-            <DAOBreadcrumb items={breadcrumbs} />
+            <Breadcrumb items={breadcrumbs} />
             <div className="space-y-2">
               <DaoBadge daoType={dao.dao_type} />
               <h1 className="text-3xl font-medium tablet:text-5xl">

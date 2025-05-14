@@ -6,7 +6,7 @@ interface Breadcrumbs {
   link: string
 }
 
-export default function DAOBreadcrumb({ items }: { items: Breadcrumbs[] }) {
+export default function Breadcrumb({ items }: { items: Breadcrumbs[] }) {
   return (
     <div className="flex gap-2">
       {items.map((item, index) => {

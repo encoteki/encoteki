@@ -106,7 +106,9 @@ export default function WalletMethod() {
 
           <div className="flex w-full justify-between text-base font-medium">
             <p>Amount</p>
-            <p>{costValue.native} AVAX</p>
+            <p>
+              {costValue.native} {costValue.eth}
+            </p>
           </div>
         </section>
 
