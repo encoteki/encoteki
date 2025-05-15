@@ -1,7 +1,8 @@
+import { HexString } from '@/types/hexString'
 import { abi } from './contract-abi'
-import { Address } from 'viem'
 
-const ca: Address = (process.env.NEXT_PUBLIC_TESTNET_CA as Address) ?? '0x00'
+const ca: HexString =
+  (process.env.NEXT_PUBLIC_TESTNET_CA as HexString) ?? '0x00'
 
 const contractConfig = {
   abi,

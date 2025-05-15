@@ -15,11 +15,10 @@ import { submitDAO } from '@/utils/supabase/dao/submitDAO'
 import Link from 'next/link'
 import { DaoType } from '@/enums/daoType'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { useAccount } from 'wagmi'
+import { useAccount, useReadContract } from 'wagmi'
 import { getUsedNFTId } from '@/utils/supabase/dao/getUsedNFTId'
 
 import contractConfig from '@/config/contract-config'
-import { useWalletOfOwner } from '@/hooks/useWalletOfOwner'
 
 type Params = Promise<{ daoId: string }>
 
@@ -67,9 +66,11 @@ export default function DAODetailPage({ params }: { params: Params }) {
     },
   ]
 
-  const { data: walletTokens, isSuccess } = useWalletOfOwner({
-    contractConfig,
-    address: address ?? '0x00',
+  // Get nft id of address wallet
+  const { data, isSuccess } = useReadContract({
+    ...contractConfig,
+    functionName: 'walletOfOwner',
+    args: [address ?? '0x1c3294B823cF9ac62940c64E16bce6ebAf7dca5B'],
   })
 
   useEffect(() => {
@@ -88,11 +89,7 @@ export default function DAODetailPage({ params }: { params: Params }) {
       if (!isConnected || !isSuccess) return
 
       // Convert BigInt array to number array
-      const walletOfOwner = Array.isArray(walletTokens)
-        ? walletTokens.map((id) => Number(id))
-        : []
-
-      console.dir(walletOfOwner)
+      const walletOfOwner = data.map((id) => Number(id))
 
       // Get data of NFT Id that has vote
       const usedNFTId = await getUsedNFTId(
@@ -100,8 +97,6 @@ export default function DAODetailPage({ params }: { params: Params }) {
         walletOfOwner,
         chainId as number,
       )
-
-      console.log(usedNFTId)
 
       if (Array.isArray(usedNFTId)) {
         const usedNfts = usedNFTId.map((nft) => String(nft.nft_id))
@@ -112,7 +107,6 @@ export default function DAODetailPage({ params }: { params: Params }) {
         setAvailableNFTIds(unusedNfts)
         setVoteCount(unusedNfts.length)
         setEligibleVote(walletOfOwner.length > 0)
-        console.dir(unusedNfts)
       } else {
         console.error('Data is not an array or is undefined.')
       }
@@ -133,7 +127,7 @@ export default function DAODetailPage({ params }: { params: Params }) {
     }
 
     initDAO()
-  }, [params, isConnected, isSuccess, walletTokens, chainId])
+  }, [params, isConnected, isSuccess, data, chainId])
 
   // Handle Click Options
   const [isClickedOption, setIsClickedOption] = useState<number>(0)
