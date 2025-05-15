@@ -1,8 +1,8 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '../client'
 import { getMappingSDGs } from './getMappingSDGs'
 
 export async function getSDGsByIds(partnerid: number) {
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
 
   const sdgIds: number[] = []
 

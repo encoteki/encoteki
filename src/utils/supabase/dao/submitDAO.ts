@@ -1,8 +1,8 @@
 import { SubmitVoteDto } from '@/types/dao'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/utils/supabase/client'
 
 export async function submitDAO(request: SubmitVoteDto): Promise<boolean> {
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
 
   const { chain_id, nft_id, dao_id, option_id, isNeutral } = request
 

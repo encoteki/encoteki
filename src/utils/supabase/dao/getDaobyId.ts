@@ -1,7 +1,7 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/utils/supabase/client'
 
 export async function getDaoById(daoId: number) {
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('dao')

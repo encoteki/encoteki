@@ -1,7 +1,7 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '../client'
 
 export async function getPartnerById(partnerId: number) {
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('partners')

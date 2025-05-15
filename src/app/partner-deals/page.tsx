@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import NavBar from '@/components/navbar'
 import Footer from '@/components/footer'
-import { getPartners } from '@/utils/supabase/getPartners'
+import { getPartners } from '@/utils/supabase/partners/getPartners'
 import { PartnerResponse } from '@/types/supabase'
 import Link from 'next/link'
 
