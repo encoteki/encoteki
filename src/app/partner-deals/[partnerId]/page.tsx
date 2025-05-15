@@ -14,8 +14,9 @@ import { getSDGsByIds } from '@/utils/supabase/partners/getSDGsByIds'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { useAccount, useReadContract } from 'wagmi'
+import { useAccount } from 'wagmi'
 import contractConfig from '@/config/contract-config'
+import { useWalletOfOwner } from '@/hooks/useWalletOfOwner'
 
 type Params = Promise<{ partnerId: string }>
 
@@ -27,10 +28,9 @@ export default function PartnerDealPage({ params }: { params: Params }) {
   const constantDemoCode = 'DEMOPROMOCODE'
 
   // Get nft id of address wallet
-  const { data, isSuccess } = useReadContract({
-    ...contractConfig,
-    functionName: 'walletOfOwner',
-    args: [address ?? '0x1c3294B823cF9ac62940c64E16bce6ebAf7dca5B'],
+  const { data, isSuccess } = useWalletOfOwner({
+    contractConfig,
+    address: address ?? '0x00',
   })
 
   const [loading, setLoading] = useState(true)
@@ -74,7 +74,9 @@ export default function PartnerDealPage({ params }: { params: Params }) {
         if (!isConnected || !isSuccess) return
 
         // Convert BigInt array to number array
-        const walletOfOwner = data.map((id) => Number(id))
+        const walletOfOwner = Array.isArray(data)
+          ? data.map((id) => Number(id))
+          : []
 
         if (walletOfOwner.length > 0) {
           setIsHolder(true)
