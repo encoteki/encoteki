@@ -91,7 +91,7 @@ export default function NFTCollection() {
                       {item.about}
                     </p>
                   </div>
-                  <Link href="https://mint.encoteki.com">
+                  <Link href="/mint">
                     <button className="w-full rounded-[32px] bg-primary-green px-4 py-2 duration-300 hover:bg-green-10 tablet:w-[104px] tablet:px-6 tablet:py-3">
                       <span className="text-base font-medium text-white">
                         Mint

@@ -172,6 +172,7 @@ export default function DAODetailPage({ params }: { params: Params }) {
         <Loading />
       ) : (
         <main className="mx-auto my-16 w-[calc(100%-32px)] max-w-[912px] space-y-12 tablet:my-32">
+          {/* Header */}
           <header className="space-y-8">
             <Breadcrumb items={breadcrumbs} />
             <div className="space-y-2">
@@ -197,11 +198,11 @@ export default function DAODetailPage({ params }: { params: Params }) {
             </div>
           </header>
 
-          <div className="flex h-full flex-col gap-6 tablet:flex-row tablet:gap-12">
-            <section className="flex h-full w-[416px] flex-col justify-between gap-6 rounded-[32px] bg-white p-8">
+          <div className="flex flex-col gap-6 tablet:flex-row tablet:gap-12">
+            {/* Options Section */}
+            <section className="flex h-auto w-full flex-col justify-between gap-6 rounded-[32px] bg-white p-6 tablet:w-1/2 tablet:p-8">
               {!hasVote ? (
                 <>
-                  {/* Options Section */}
                   <div className="space-y-6">
                     <h1 className="text-2xl font-medium">Options:</h1>
                     <div className="flex flex-col gap-3">
@@ -286,7 +287,7 @@ export default function DAODetailPage({ params }: { params: Params }) {
             </section>
 
             {/* // DAO Article */}
-            <article className="w-[calc(912px-426px)]">
+            <article className="w-full tablet:w-1/2">
               {dao.dao_type === DaoType.proposal ? (
                 <p className="text-justify">{dao.dao_content}</p>
               ) : (

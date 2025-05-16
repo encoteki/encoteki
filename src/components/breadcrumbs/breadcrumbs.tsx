@@ -11,7 +11,7 @@ export default function Breadcrumb({ items }: { items: Breadcrumbs[] }) {
     <div className="flex gap-2">
       {items.map((item, index) => {
         return (
-          <div key={index} className="flex gap-2 text-lg">
+          <div key={index} className="flex gap-2 text-base md:text-lg">
             {index === items.length - 1 ? (
               <span className={'text-neutral-10'}>{item.page}</span>
             ) : (
