@@ -5,6 +5,8 @@ export interface DAOResponse {
   dao_type: number
   start_date: string
   end_date: string
+  proposal_id: number
+  scoring: string
 }
 
 export interface OptionsResponse {
@@ -19,4 +21,26 @@ export interface SubmitVoteDto {
   dao_id: number
   option_id?: number
   isNeutral: boolean
+}
+
+export interface ProposalDto {
+  name: string
+  description: string
+  business_model: string
+  market_opportunity: string
+  competitive_adv: string
+  management_team: string
+  team_cv: string
+  pitch_deck: string
+  amount: number
+  allocation: number
+}
+
+export interface SubmitProposalDto {
+  dao_name: string
+  dao_content: string
+  dao_type: number
+  end_date: string
+  scoring: string
+  proposal: ProposalDto
 }

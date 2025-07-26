@@ -3,6 +3,8 @@ import Footer from '@/components/footer'
 import NavBar from '@/components/navbar'
 import { Metadata } from 'next'
 import DAOList from './daoList'
+import DefaultButton from '@/components/button/defaultButton'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,7 +46,18 @@ export default async function DAO() {
           </div>
         </header>
 
-        <section className="h-[calc((142px*3)+(32px*3))]">
+        {/* <section className="h-[calc((142px*3)+(32px*3))]"> */}
+        <section>
+          <div className="mb-8 flex w-full justify-end">
+            <Link href="/dao/create">
+              <DefaultButton
+                wording={'Create'}
+                isPrimary={false}
+                className="px-8 py-4"
+              />
+            </Link>
+          </div>
+
           <DAOList />
         </section>
       </main>

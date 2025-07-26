@@ -6,6 +6,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { config } from '../config/rainbowkit-config'
 import { MintProvider } from '@/context/mintContext'
 import { DaoProvider } from '@/context/daoContext'
+import { HeroUIProvider } from '@heroui/react'
 
 export default function Provider({
   children,
@@ -18,9 +19,11 @@ export default function Provider({
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
-          <MintProvider>
-            <DaoProvider>{children}</DaoProvider>
-          </MintProvider>
+          <HeroUIProvider>
+            <MintProvider>
+              <DaoProvider>{children}</DaoProvider>
+            </MintProvider>
+          </HeroUIProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
