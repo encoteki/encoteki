@@ -30,12 +30,12 @@ export default function Home() {
           <section id="roadmap" className="py-10 tablet:py-[60px]">
             <Roadmap />
           </section>
-          <section id="about" className="w-full py-10 tablet:py-[60px]">
+          {/* <section id="about" className="w-full py-10 tablet:py-[60px]">
             <h1 className="mb-8 text-center text-[32px] font-medium tablet:text-5xl">
               Encoteki Family
             </h1>
             <p className="text-center">Belum berkeluarga</p>
-          </section>
+          </section> */}
           <section id="faq" className="pt-10 tablet:pt-[60px]">
             <Faq />
           </section>
