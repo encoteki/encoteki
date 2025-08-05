@@ -6,6 +6,7 @@ import About from './about'
 import Roadmap from './roadmap'
 import Faq from './faq'
 import Footer from '@/components/footer'
+import Family from './family'
 
 export default function Home() {
   return (
@@ -30,17 +31,15 @@ export default function Home() {
           <section id="roadmap" className="py-10 tablet:py-[60px]">
             <Roadmap />
           </section>
-          {/* <section id="about" className="w-full py-10 tablet:py-[60px]">
-            <h1 className="mb-8 text-center text-[32px] font-medium tablet:text-5xl">
-              Encoteki Family
-            </h1>
-            <p className="text-center">Belum berkeluarga</p>
-          </section> */}
+
           <section id="faq" className="pt-10 tablet:pt-[60px]">
             <Faq />
           </section>
         </div>
       </main>
+      <section id="about" className="w-full bg-khaki-90 py-10 tablet:py-[60px]">
+        <Family />
+      </section>
 
       <Footer />
     </>

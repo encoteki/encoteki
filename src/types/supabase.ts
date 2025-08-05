@@ -18,3 +18,10 @@ export interface SDGResponse {
   bg_color: string
   text_color: string
 }
+
+export interface FamilyResponse {
+  id: number
+  name: string
+  image_url: string
+  link?: string
+}

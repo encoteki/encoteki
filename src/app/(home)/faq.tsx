@@ -38,7 +38,7 @@ export default function Faq() {
 
   return (
     <div className="max-w-full">
-      <div className="rounded-2xl bg-khaki-99 px-5 py-6 tablet:rounded-[32px] tablet:px-16 tablet:py-20 desktop:px-[100px] desktop:py-20">
+      <div className="rounded-2xl px-5 py-6 tablet:rounded-[32px] tablet:px-16 tablet:py-20 desktop:px-[100px] desktop:py-20">
         {/* Mobile & Tablet */}
         <div className="flex flex-col gap-y-6 desktop:hidden">
           <HomepageHeading
@@ -55,7 +55,7 @@ export default function Faq() {
               <div
                 key={index}
                 onClick={() => handleClick(index)}
-                className={`rounded-2xl border border-[#E0E0E0] bg-white p-8 duration-200 hover:cursor-pointer hover:border-primary-green hover:text-primary-green tablet:rounded-[32px]`}
+                className={`rounded-2xl border border-[#E0E0E0] bg-khaki-99 p-8 duration-200 hover:cursor-pointer hover:border-primary-green hover:text-primary-green tablet:rounded-[32px]`}
               >
                 <div className="flex justify-between">
                   <h1
@@ -101,7 +101,7 @@ export default function Faq() {
                 <div
                   key={index}
                   onClick={() => handleClick(index)}
-                  className={`border border-[#E0E0E0] bg-white duration-200 hover:cursor-pointer hover:border-primary-green hover:text-primary-green desktop:rounded-[32px] desktop:px-8 desktop:py-6`}
+                  className={`border border-[#E0E0E0] bg-khaki-99 duration-200 hover:cursor-pointer hover:border-primary-green hover:text-primary-green desktop:rounded-[32px] desktop:px-8 desktop:py-6`}
                 >
                   <div className="flex justify-between">
                     <h1
