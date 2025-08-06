@@ -37,12 +37,15 @@ export default async function Family() {
                   key={`item-${rowIndex}-${itemIndex}`}
                   className="flex h-24 w-24 items-center justify-center rounded-lg bg-white p-4"
                 >
-                  <Image
-                    src={item.image_url}
-                    alt={item.name}
-                    width={75}
-                    height={75}
-                  />
+                  <a href={item.link} target="_blank" rel="noopener noreferrer">
+                    {' '}
+                    <Image
+                      src={item.image_url}
+                      alt={item.name}
+                      width={75}
+                      height={75}
+                    />
+                  </a>
                 </div>
               ))}
             </div>
