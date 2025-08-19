@@ -27,6 +27,7 @@ export default async function Family() {
                 <Image
                   src={item.image_url}
                   alt={item.name}
+                  priority
                   width={80}
                   height={80}
                   className="h-16 w-auto object-contain"

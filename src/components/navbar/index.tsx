@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import EncotekiLogo from '@/assets/encoteki-icon.png'
-import IconMenu from '@/assets/icon/icon.menu.svg'
 import HomepageNav from './homepageNav'
 import NavbarButton from '../button/navbarButton'
 import ConnectWalletButton from '../button/connectWalletButton'
@@ -25,18 +24,9 @@ export default function NavBar() {
                 <Image
                   src={EncotekiLogo}
                   alt="alt"
-                  className=":h-[54px] hidden w-[79px] tablet:block tablet:h-[64px] tablet:w-[92px]"
+                  className="h-[54px] w-[79px] tablet:block tablet:h-[64px] tablet:w-[92px]"
                 />
               </Link>
-
-              {/* Mobile Homepage Nav */}
-              <Image
-                src={IconMenu}
-                alt="alt"
-                width={32}
-                height={32}
-                className="desktop:hidden"
-              />
             </div>
 
             {/* Desktop Homepage Nav */}
