@@ -5,17 +5,6 @@ import Image from 'next/image'
 export default async function Family() {
   const families: FamilyResponse[] = await getFamily()
 
-  // Split items into chunks of 8 for each row
-  const chunkArray = (array: FamilyResponse[], chunkSize: number) => {
-    const result = []
-    for (let i = 0; i < array.length; i += chunkSize) {
-      result.push(array.slice(i, i + chunkSize))
-    }
-    return result
-  }
-
-  const rows = chunkArray(families, 8)
-
   return (
     <>
       <div className="space-y-3">
@@ -24,33 +13,32 @@ export default async function Family() {
         </h1>
         <p className="text-center">Check out cool stuff from our friends!</p>
       </div>
+
       <div className="mt-14">
-        {' '}
-        <div className="flex flex-col items-center gap-4 p-4">
-          {rows.map((row, rowIndex) => (
-            <div
-              key={`row-${rowIndex}`}
-              className="flex w-full max-w-6xl flex-wrap justify-center gap-4"
-            >
-              {row.map((item: FamilyResponse, itemIndex: number) => (
-                <div
-                  key={`item-${rowIndex}-${itemIndex}`}
-                  className="flex h-24 w-24 items-center justify-center rounded-lg bg-white p-4"
-                >
-                  <a href={item.link} target="_blank" rel="noopener noreferrer">
-                    {' '}
-                    <Image
-                      src={item.image_url}
-                      alt={item.name}
-                      width={75}
-                      height={75}
-                    />
-                  </a>
-                </div>
-              ))}
-            </div>
+        <ul className="mx-auto grid max-w-6xl grid-cols-3 gap-4 p-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8">
+          {families.map((item) => (
+            <li key={item.id} className="rounded-lg bg-white">
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex aspect-square items-center justify-center p-4"
+              >
+                <Image
+                  src={item.image_url}
+                  alt={item.name}
+                  width={80}
+                  height={80}
+                  className="h-16 w-auto object-contain"
+                  sizes="(max-width: 640px) 33vw,
+                 (max-width: 768px) 25vw,
+                 (max-width: 1024px) 20vw,
+                 12.5vw"
+                />
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </>
   )

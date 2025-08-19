@@ -7,6 +7,7 @@ import Roadmap from './roadmap'
 import Faq from './faq'
 import Footer from '@/components/footer'
 import Family from './family'
+import FadeInSection from '@/components/ui/FadeInSection'
 
 export default function Home() {
   return (
@@ -20,16 +21,24 @@ export default function Home() {
             id="collection"
             className="pb-10 pt-20 tablet:pb-[60px] tablet:pt-[120px]"
           >
-            <NFTCollection />
+            <FadeInSection>
+              <NFTCollection />
+            </FadeInSection>
           </section>
           <section id="benefit" className="py-10 tablet:py-[60px]">
-            <Benefit />
+            <FadeInSection>
+              <Benefit />
+            </FadeInSection>
           </section>
           <section id="about" className="py-10 tablet:py-[60px]">
-            <About />
+            <FadeInSection>
+              <About />
+            </FadeInSection>
           </section>
           <section id="roadmap" className="py-10 tablet:py-[60px]">
-            <Roadmap />
+            <FadeInSection>
+              <Roadmap />
+            </FadeInSection>
           </section>
 
           <section id="faq" className="pt-10 tablet:pt-[60px]">
