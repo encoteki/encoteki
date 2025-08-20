@@ -13,6 +13,7 @@ export interface OptionsResponse {
   option_id: number
   option_name: string
   dao_id: number
+  votes: number
 }
 
 export interface SubmitVoteDto {

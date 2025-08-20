@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Navbar from '@/components/navbar'
 import {
   DAOResponse,
@@ -17,20 +17,49 @@ import Loading from '@/app/loading'
 import { getDaoById } from '@/utils/supabase/dao/getDaobyId'
 import { getDaoOptions } from '@/utils/supabase/dao/getDaoOptions'
 import { submitDAO } from '@/utils/supabase/dao/submitDAO'
-// import Link from 'next/link'
 import { DaoType } from '@/enums/daoType'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useAccount, useReadContract } from 'wagmi'
 import { getUsedNFTId } from '@/utils/supabase/dao/getUsedNFTId'
-
 import contractConfig from '@/config/contract-config'
 import { Accordion, AccordionItem } from '@heroui/react'
 import { Link } from '@heroui/link'
 import { Input } from '@heroui/input'
 import { getProposal } from '@/utils/supabase/dao/getProposal'
 import DefaultButton from '@/components/button/defaultButton'
+import { motion } from 'framer-motion'
+import { getDaoResults } from '@/utils/supabase/dao/getResults'
 
 type Params = Promise<{ daoId: string }>
+
+/** ---- Helper: merge counts into options by (dao_id, option_id) ---- */
+type CountRow = { option_id: number; dao_id?: number; votes: number }
+type OptionRow = { option_id: number; dao_id?: number; option_name: string }
+
+function mergeVotesIntoOptions<T extends OptionRow>(
+  options: T[],
+  counts: CountRow[],
+  opts?: { matchDao?: boolean },
+): (T & { votes: number })[] {
+  const { matchDao = true } = opts ?? {}
+  const key = (x: { option_id: number; dao_id?: number }) =>
+    matchDao ? `${x.dao_id ?? ''}:${x.option_id}` : String(x.option_id)
+
+  const countMap = new Map<string, number>()
+  for (const c of counts) {
+    const k = key(c)
+    countMap.set(k, (countMap.get(k) ?? 0) + Number(c.votes ?? 0))
+  }
+
+  return options.map((o) => {
+    const k = key(o)
+    return { ...o, votes: countMap.get(k) ?? 0 }
+  })
+}
+
+// Read votes flexibly from any option row
+const getVotes = (o: OptionsResponse) =>
+  (o as any).votes ?? (o as any).vote_count ?? (o as any).count ?? 0
 
 export default function DAODetailPage({ params }: { params: Params }) {
   const [loading, setLoading] = useState(true)
@@ -59,23 +88,13 @@ export default function DAODetailPage({ params }: { params: Params }) {
   const [eligibleVote, setEligibleVote] = useState<boolean>(true)
   // Status of vote
   const [hasVote, setHasVote] = useState<boolean>(false)
+  // Control reveal animation of results
+  const [revealResults, setRevealResults] = useState<boolean>(false)
 
   const breadcrumbs = [
-    {
-      index: 1,
-      page: 'Home',
-      link: '/',
-    },
-    {
-      index: 2,
-      page: 'DAO',
-      link: '/dao',
-    },
-    {
-      index: 3,
-      page: dao.dao_name,
-      link: `/dao/${dao.dao_id}`,
-    },
+    { index: 1, page: 'Home', link: '/' },
+    { index: 2, page: 'DAO', link: '/dao' },
+    { index: 3, page: dao.dao_name, link: `/dao/${dao.dao_id}` },
   ]
 
   // Get nft id of address wallet
@@ -100,10 +119,8 @@ export default function DAODetailPage({ params }: { params: Params }) {
     const getAvailableVote = async (daoId: string) => {
       if (!isConnected || !isSuccess) return
 
-      // Convert BigInt array to number array
-      const walletOfOwner = data.map((id) => Number(id))
+      const walletOfOwner = (data as any[]).map((id) => Number(id))
 
-      // Get data of NFT Id that has vote
       const usedNFTId = await getUsedNFTId(
         Number(daoId),
         walletOfOwner,
@@ -134,9 +151,7 @@ export default function DAODetailPage({ params }: { params: Params }) {
       } catch (error) {
         console.error('Init DAO failed:', error)
       } finally {
-        setTimeout(() => {
-          setLoading(false)
-        }, 1000)
+        setTimeout(() => setLoading(false), 1000)
       }
     }
 
@@ -152,7 +167,7 @@ export default function DAODetailPage({ params }: { params: Params }) {
     setSubmitDisabled(false)
   }
 
-  // Submit Vote
+  // Submit Vote + refetch tallies + merge + animate
   const submitVote = async (isNeutralVote: boolean) => {
     let req: SubmitVoteDto
 
@@ -173,15 +188,43 @@ export default function DAODetailPage({ params }: { params: Params }) {
         isNeutral: false,
       }
     }
-    const hasVote: boolean = await submitDAO(req)
-    setHasVote(hasVote)
+
+    const voted: boolean = await submitDAO(req)
+    setHasVote(voted)
+
+    if (voted) {
+      // aggregated counts: [{ option_id, dao_id, votes }, ...]
+      const counts = await getDaoResults(Number(dao.dao_id))
+
+      // merge counts into existing options (adds a `votes` field)
+      const merged = mergeVotesIntoOptions(
+        options as unknown as OptionRow[],
+        counts as CountRow[],
+        { matchDao: true },
+      )
+
+      setOptions(merged as unknown as OptionsResponse[])
+      requestAnimationFrame(() => setRevealResults(true))
+    }
   }
+
+  // Percentages for results view
+  const totalVotes = useMemo(
+    () => options.reduce((sum, o) => sum + getVotes(o), 0),
+    [options],
+  )
+  const pct = (o: OptionsResponse) =>
+    totalVotes
+      ? Math.max(0, Math.min(100, (getVotes(o) / totalVotes) * 100))
+      : 0
+
+  // treat ~100% as full (avoid floating/rounding issues)
+  const isFull = (p: number) => p >= 99.5
 
   return (
     <>
       <Navbar />
 
-      {/* DAO Detail */}
       {loading ? (
         <Loading />
       ) : (
@@ -220,8 +263,7 @@ export default function DAODetailPage({ params }: { params: Params }) {
               />
             ) : (
               <>
-                {' '}
-                {/* Options Section */}
+                {/* Options / Results Section */}
                 <section className="flex h-auto w-full flex-col justify-between gap-6 rounded-[32px] bg-white p-6 tablet:w-1/2 tablet:p-8">
                   {!hasVote ? (
                     <>
@@ -302,18 +344,60 @@ export default function DAODetailPage({ params }: { params: Params }) {
                           You have casted all your votes
                         </p>
                       </div>
-                      <p>
-                        Thank you for your vote! Your contribution is helping us
-                        make a real difference, no matter the cause. We’ll keep
-                        you updated on the results and how your choice will
-                        impact our mission. Together, we can drive meaningful
-                        change for the environment and our communities. Stay
-                        tuned for more updates and ways to stay involved!
-                      </p>
+
+                      {/* Animated Results */}
+                      <div className="space-y-6">
+                        <h2 className="text-xl font-semibold">
+                          Current results
+                        </h2>
+                        <div className="flex flex-col gap-3">
+                          {options.map((option) => {
+                            const percent = pct(option)
+                            const full = isFull(percent)
+                            return (
+                              <div
+                                key={option.option_id}
+                                className="relative overflow-hidden rounded-[100px] border border-gray-200 bg-white"
+                              >
+                                {/* Animated fill bar (full = solid green) */}
+                                <motion.div
+                                  className={`absolute inset-y-0 left-0 ${full ? 'bg-primary-green' : 'bg-primary-green/20'}`}
+                                  initial={{ width: 0 }}
+                                  animate={{
+                                    width: revealResults ? `${percent}%` : 0,
+                                  }}
+                                  transition={{
+                                    type: 'spring',
+                                    stiffness: 140,
+                                    damping: 22,
+                                  }}
+                                />
+                                {/* Content wrapper WITH padding so bar can fill 100% */}
+                                <div
+                                  className={`relative z-10 flex items-center justify-between px-5 py-3 ${full ? 'text-white' : ''}`}
+                                >
+                                  <p className="w-full">{option.option_name}</p>
+                                  <span
+                                    className={`ml-3 shrink-0 text-sm tabular-nums ${full ? 'text-white' : 'text-gray-700'}`}
+                                  >
+                                    {Math.round(percent)}%
+                                  </span>
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                        {totalVotes > 0 && (
+                          <p className="text-sm text-neutral-40">
+                            Total votes counted: {totalVotes}
+                          </p>
+                        )}
+                      </div>
                     </>
                   )}
                 </section>
-                {/* // DAO Article */}
+
+                {/* DAO Article */}
                 <article className="w-full tablet:w-1/2">
                   {dao.dao_type === DaoType.proposal ? (
                     <p className="text-justify">{dao.dao_content}</p>
@@ -362,7 +446,6 @@ function BusinessDetails({
         setProposal(data)
 
         const parsedScoring = JSON.parse(scoring)
-        console.dir(parsedScoring)
         if (Array.isArray(parsedScoring)) {
           const scores = parsedScoring.map((item: any) => item.scoring)
           setScore(scores)
@@ -371,7 +454,6 @@ function BusinessDetails({
         console.error('Initialization error:', error)
       }
     }
-
     init()
   }, [proposalId, scoring])
 
@@ -481,7 +563,6 @@ function BusinessDetails({
               </select>
             </div>
           }
-          className=""
           label="Funding"
           labelPlacement="inside"
           size="lg"
@@ -489,7 +570,12 @@ function BusinessDetails({
         />
       </div>
 
-      <DefaultButton wording={'Submit Fund'} isPrimary={true} className="p-3" />
+      <DefaultButton
+        wording={'WIP --> DEMO PURPOSE ONLY :)'}
+        isPrimary={true}
+        className="p-3"
+        isDisabled={true}
+      />
     </div>
   )
 }
